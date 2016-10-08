@@ -15,10 +15,16 @@
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
+          $tweet.text('@' + tweet.user + ': ' + tweet.message + "\xa0\xa0\xa0\xa0" + tweet.created_at.getHours() + ":" + tweet.created_at.getMinutes());
           $tweet.appendTo($body);
           index -= 1;
         }
+        $('<button id="refresh">Get New Tweet!</button>').appendTo("body");
+        $('#refresh').on("click", function(){location.reload()})
+        $('body').css("background-color", "grey")
+
+
+
 
       });
 
