@@ -3,25 +3,74 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link rel="stylesheet" type="text/css" href="Twettler.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
   </head>
-  <body>
+  <body class="container-fluid text-center">
     <script>
-
+      /*---------- beginning of the jQuery code ------*/
       $(document).ready(function(){
         var $body = $('body');
-        $body.html('');
+        $body.css({'color': 'red', 'background-color': '#E6E6FA'})
 
+        /*--------- title ----------*/
+
+        $body.html('WELCOME TO TWEETLER!!');
+
+
+        /*---------- button for refresh all tweets --------*/
+
+        var $refreshbutton = $('<div></div>')
+        $refreshbutton.appendTo($body)
+        var $button = $('<button class="btn btn-success btn-sm refresh-tweets"><i class="fa fa-twitter"></i>Get New Tweets</button>')
+        $button.appendTo($refreshbutton);
+
+        /*-------- tweets generator --------*/
+
+        //index = stream.home of tweets array
         var index = streams.home.length - 1;
+        //travers through the array of tweets in stream.home
         while(index >= 0){
+          //tweet = array of random tweets form stream.home array
           var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message + "\xa0\xa0\xa0\xa0" + tweet.created_at.getHours() + ":" + tweet.created_at.getMinutes());
+          //$tweet creates a new div in html
+          var $tweet = $('<div class="container-fluid"></div>');
+          //inside of the $tweet div, each text is a display of one user tweet message (message and user come from data_generator), adding a total of 10 tweets in the $tweet div.
+          $tweet.text('@' + tweet.user + ': ' + tweet.message + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Posted on " + tweet.created_at.getFullYear() + "-" + tweet.created_at.getMonth() + "-" + tweet.created_at.getDate() + " " + tweet.created_at.getHours() + ":" + tweet.created_at.getMinutes() + ":" + tweet.created_at.getSeconds());
+
+          //add $tweet div to the end of the body
           $tweet.appendTo($body);
           index -= 1;
         }
-        $('<button id="refresh">Get New Tweet!</button>').appendTo("body");
-        $('#refresh').on("click", function(){location.reload()})
-        $('body').css("background-color", "grey")
+
+
+        /*----------- refresh all tweets button function -------*/
+
+        $button.on("click", function() {
+          location.reload(true);
+        });
+
+        /*----------- user button -------------*/
+
+        var $usertweet = $('<div class="container"></div>')
+        $usertweet.appendTo($body);
+
+        var $shawndrost = $('<button class="btn btn btn-primary btn-sm col-sm-3 user-button" id="shawndrost-tweet"><i class="fa fa-user" aria-hidden="true"></i>See Shawndrost\'s Tweet</button>');
+        $shawndrost.appendTo($usertweet);
+        // $('#shawndrost').on("click", function(){
+        //   get tweets
+        // });
+
+
+        var $sharksforcheap = $('<button class="btn btn-primary btn-sm col-sm-3 user-button" id="sharksforcheap-tweet"><i class="fa fa-user" aria-hidden="true"></i>See Sharksforcheap\'s Tweet</button>');
+        $sharksforcheap.appendTo($usertweet);
+
+        var $mracus = $('<button class="btn btn-primary btn-sm col-sm-3 user-button" id="mracus-tweet"><i class="fa fa-user" aria-hidden="true"></i>See Mracus\'s Tweet</button>');
+        $mracus.appendTo($usertweet);
+
+        var $douglascalhoun = $('<button class="btn btn-primary col-sm-3 btn-sm user-button" id="douglascalhoun-tweet"><i class="fa fa-user" aria-hidden="true"></i>See Douglascalhoun\'s Tweet </button>');
+        $douglascalhoun.appendTo($usertweet);
 
 
 
