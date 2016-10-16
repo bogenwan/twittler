@@ -6,3 +6,7 @@ body{
   color: red;
   background-color: yellow;
 }
+
+.back-to-top{
+  z-index: 100;
+}
