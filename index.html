@@ -16,19 +16,30 @@
       /*---------- beginning of the jQuery code ------*/
       $(document).ready(function(){
         var $body = $('body');
-        $body.css({'color': 'red', 'background-color': '#E6E6FA'})
+        $body.css({'background-color': '#E6E6FA', 'padding': '10px', 'background-image': 'cloud.jpg', 'background-repeat': 'repeat-y', 'background-size': '100%'})
         $body.addClass('animated slideInDown')
 
         /*--------- title ----------*/
 
-        $body.html('WELCOME TO TWEETLER!!');
+        $body.html('');
+        $title = $('<div></div>');
+        $titleH1 = $('<h1><i class="fa fa-twitter"></i>\xa0\xa0\xa0\xa0Welcome To Tweetler!</h1>')
+        //$titleH1.text('Welcome To Tweetler!');
+        $titleH1.css({'font-size': '50px', 'color': 'red', 'text-shadow': '3px 4px 5px #000'})
+        $titleH1.appendTo($title)
+        $title.appendTo($body);
+
+        $title.on('click', function(){
+          location.reload();
+        })
 
 
         /*-------- main tweet body -----------*/
         //create a main body to store all the tweets
           var $tweetBody = $('<div></div>')
-
-
+          $tweetBody.css({'padding': '20px', 'border': 'solid 2px black', 'border-radius': '25px', 'box-shadow': 'inset 0px 0px 5px 1px #000', 'color': '#990000', 'font-size': 'large', 'font-weight': 'bold', 'text-shadow': '0px 0px 0px #000', 'background-color': 'hsla(180, 100%, 30%, 0.3)'})
+// hsla(120, 100%, 50%, 0.3)
+//rgba(0, 0, 0, 0.2)
         /*-------- tweets generator --------*/
 
         //index = stream.home of tweets array
@@ -52,47 +63,92 @@
           //attatch the main tweet body to the html body
           $tweetBody.appendTo($body)
 
+
+
+
+        /*----------- refresh all tweets button function handler -------*/
+
+          function freshTweet(){
+            var index2 = 10
+            while(index2 >= 0){
+            //console.log(streams.home)
+            //console.log(streams.home[index2])
+            //tweet = array of random tweets form stream.home array
+            var tweet = streams.home[index2];
+            //$tweet creates a new div in html
+            var $tweet = $('<div class="random-tweets"></div>');
+            //inside of the $tweet div, each text is a display of one user tweet message (message and user come from data_generator), adding a total of 10 tweets in the $tweet div.
+            $tweet.text('@' + tweet.user + ': ' + tweet.message + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Posted on " + tweet.created_at.getFullYear() + "-" + tweet.created_at.getMonth() + "-" + tweet.created_at.getDate() + " " + tweet.created_at.getHours() + ":" + tweet.created_at.getMinutes() + ":" + tweet.created_at.getSeconds());
+
+            //add each $tweet div to the end of the tweet main body
+            $tweet.appendTo($tweetBody);
+            $button.appendTo($tweetBody);
+            $myTweetBox.appendTo($tweetBody);
+            $myTweet.appendTo($myTweetBox);
+            $mySubmit.appendTo($myTweetBox);
+            index2 -= 1;
+            }
+          }
+
         /*---------- refresh all tweets button--------*/
 
         //var $refreshbutton = $('<div></div>')
         //$refreshbutton.appendTo($body)
-        var $button = $('<button class="btn btn-success btn-sm refresh-tweets animated bounceInDown"><i class="fa fa-twitter"></i>\xa0\xa0\xa0Get New Tweets</button>')
+        var $button = $('<button class="btn btn-success btn-sm refresh-tweets animated zoomIn"><i class="fa fa-twitter"></i>\xa0\xa0\xa0Get New Tweets</button>')
+        $button.css({'margin': '20px', 'border': '1px solid black'})
         //attatch button below $tweetBody
         $button.appendTo($tweetBody);
 
-        /*----------- refresh all tweets button function handler -------*/
+        /*---------- refresh all tweet on click handler ----------*/
 
         $button.on("click", function() {
-          $('.random-tweets').hide();
-          $('.random-tweets').remove();
-          var newTweets = function(){while(index >= 0){
-          //tweet = array of random tweets form stream.home array
-          var tweet = streams.home[index];
-          //$tweet creates a new div in html
-          var $tweet = $('<div class="random-tweets"></div>');
-          //inside of the $tweet div, each text is a display of one user tweet message (message and user come from data_generator), adding a total of 10 tweets in the $tweet div.
-          $tweet.text('@' + tweet.user + ': ' + tweet.message + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Posted on " + tweet.created_at.getFullYear() + "-" + tweet.created_at.getMonth() + "-" + tweet.created_at.getDate() + " " + tweet.created_at.getHours() + ":" + tweet.created_at.getMinutes() + ":" + tweet.created_at.getSeconds());
-
-          //add each $tweet div to the end of the tweet main body
-          $tweet.appendTo($tweetBody);
-          index -= 1;
-        }
-      }
-      console.log(newTweets())
-          //$tweetBody.replaceWith($tweetBody)
-          //location.load(location.href + "maintweet");
-          //freshTweets();
-          $('newTweets').fadeIn('slow');
-         //location.reload();
+          //$('.random-tweets').hide();
+          //$('.random-tweets').remove();
+          freshTweet()
+          $("html, body").animate({ scrollTop: $tweetBody.height() - 300}, 2000);
         });
 
 
+        /*-------------------- my own tweet box div ------------------------*/
+
+        var $myTweetBox = $('<div id="my-tweet-div"></div>')
+        $myTweetBox.appendTo($tweetBody)
+
+        /*-------------------- my own tweet submit box------------------*/
+
+        var $myTweet = $('<input type="text" id="my-tweet-box" placeholder="Write a Tweet!">')
+        $myTweet.appendTo($myTweetBox)
+
+        /*-------------------- my tweet submit button ----------------------*/
+
+        var $mySubmit = $('<button type="submit" id="my-submit-button" class="btn btn-primary btn-xs"><i class="fa fa-twitter"></i>Submit</button>')
+        $mySubmit.css({'margin': '20px', 'border': '1px solid black'})
+        $mySubmit.appendTo($myTweetBox)
+
+        /*-------------------- my tweet click function --------------------*/
+
+        $mySubmit.on('click', function(){
+          //create a div for mytweet text
+          var $tweetInput = $('<div></div>')
+          //insert the text to the div
+          //access the submit text element to get the value that user typed at position[0] in the array
+          $tweetInput.text($myTweet[0].value)
+          //attatch tweetinput div to the tweet body
+          $tweetInput.appendTo($tweetBody)
+                      $button.appendTo($tweetBody);
+            $myTweetBox.appendTo($tweetBody);
+            $myTweet.appendTo($myTweetBox);
+            $mySubmit.appendTo($myTweetBox);
+        })
 
         /*----------- user tweets body ---------*/
-        var $usertweet = $('<div></div>')
+        var $usertweet = $('<div class="animated zoomIn"></div>')
+        $usertweet.css({'padding': '25px', 'border': 'solid 2px black', 'border-radius': '25px', 'box-shadow': 'inset 0px 0px 5px 1px #000', 'color': '#990000', 'font-size': 'large', 'font-weight': 'bold', 'text-shadow': '0px 0px 0px #000', 'background-color': 'hsla(180, 100%, 30%, 0.3)'})
         $usertweet.appendTo($body);
 
-
+        /*----------- userbuttons div -----------*/
+        $buttonDiv = $('<div class="btn-group"></div>')
+        $buttonDiv.css({'margin': '20px'})
         /*----------- button for creating user's tweet function-------------*/
 
           var createTweet = function(user) {
@@ -109,39 +165,89 @@
             }
           }
 
+        /*------------ reset animation function------------*/
+
+        function reset($elem) {
+          $elem.before($elem.clone(true));
+          var $newElem = $elem.prev();
+          $elem.remove();
+          return $newElem
+        };
+
         /*------------ each user's button ------------------*/
 
-        var $shawndrost = $('<button class="btn btn btn-primary btn-sm col-sm-3 user-button animated swing" id="shawndrost"><i class="fa fa-user" aria-hidden="true"></i>\xa0\xa0\xa0See Shawndrost\'s Tweet</button>');
+        var $shawndrost = $('<button class="btn btn btn-primary btn-xs col-sm-3 user-button animated swing" id="shawndrost"><i class="fa fa-user" aria-hidden="true"></i>\xa0\xa0\xa0See Shawndrost\'s Tweet</button>');
+        $shawndrost.css({'border': '1px solid black'})
         $shawndrost.appendTo($usertweet);
         //on click function
         $('#shawndrost').on("click", function(){
           createTweet('shawndrost')
+
+          // var elem = $eachUserTweet;
+          // //var newElem = elem.clone(true);
+          // //elem.before(newElem);
+          // $eachUserTweet = reset($eachUserTweet);
+          // $eachUserTweet.removeClass("animated zoomIn");
+          // $$eachUserTweet.addClass("animated zoomIn");
+
+          //$("." + elem.attr("class") + ":last").remove();
+
+
+
+          //also cause the html page to scroll down
+          //access the html body and set scroll down to the html document height by useing the .height method
+          //to get the number and set scroll speed time
+          $("html, body").animate({ scrollTop: $(document).height()}, 2000);
+
         });
 
 
-        var $sharksforcheap = $('<button class="btn btn-primary btn-sm col-sm-3 user-button animated swing" id="sharksforcheap"><i class="fa fa-user" aria-hidden="true"></i>\xa0\xa0\xa0See Sharksforcheap\'s Tweet</button>');
+        var $sharksforcheap = $('<button class="btn btn-primary btn-xs col-sm-3 user-button animated swing" id="sharksforcheap"><i class="fa fa-user" aria-hidden="true"></i>\xa0\xa0\xa0See Sharksforcheap\'s Tweet</button>');
+        $sharksforcheap.css({'border': '1px solid black'})
         $sharksforcheap.appendTo($usertweet);
         //on click function
         $('#sharksforcheap').on("click", function(){
           createTweet('sharksforcheap')
+          //also cause the html page to scroll down
+          $("html, body").animate({scrollTop: $(document).height()}, 2000);
         });
 
-        var $mracus = $('<button class="btn btn-primary btn-sm col-sm-3 user-button animated swing" id="mracus"><i class="fa fa-user" aria-hidden="true"></i>\xa0\xa0\xa0See Mracus\'s Tweet</button>');
+        var $mracus = $('<button class="btn btn-primary btn-xs col-sm-3 user-button animated swing" id="mracus"><i class="fa fa-user" aria-hidden="true"></i>\xa0\xa0\xa0See Mracus\'s Tweet</button>');
+        $mracus.css({'border': '1px solid black'})
         $mracus.appendTo($usertweet);
         //on click function
         $('#mracus').on("click", function(){
           createTweet('mracus')
+          $("html, body").animate({scrollTop: $(document).height()}, 2000);
         });
 
-        var $douglascalhoun = $('<button class="btn btn-primary col-sm-3 btn-sm user-button animated swing" id="douglascalhoun"><i class="fa fa-user" aria-hidden="true"></i>\xa0\xa0\xa0See Douglascalhoun\'s Tweet </button>');
+        var $douglascalhoun = $('<button class="btn btn-sm btn-primary btn-xs col-sm-3 user-button animated swing" id="douglascalhoun"><i class="fa fa-user" aria-hidden="true"></i>\xa0\xa0\xa0See Douglascalhoun\'s Tweet </button>');
+        $douglascalhoun.css({'border': '1px solid black'})
         $douglascalhoun.appendTo($usertweet);
         //on click function
         $('#douglascalhoun').on("click", function(){
           createTweet('douglascalhoun')
+          $("html, body").animate({scrollTop: $(document).height()}, 2000);
         });
+
+
+        /*------------------- back to tweet box button ----------*/
+        var $backToTweet = $('<a href="#" class="back-to-tweet" style="display: inline;"><i class="fa fa-twitter" aria-hidden="true"></i><u>Back to tweet</u></a>')
+        $backToTweet.css({'color': 'red', 'margin': '10px', 'font-weight': 'bold'})
+        $backToTweet.appendTo($body)
+
+        /*------------------- back to tweet button function -------------*/
+        $backToTweet.click(function(event){
+          event.preventDefault();
+          $('html, body').animate({scrollTop: $tweetBody.height() - 300}, 1000);
+            return false
+        });
+
+
 
         /*-------------------- back to top button-------------*/
         var $backToTop = $('<a href="#" class="back-to-top" style="display: inline;"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i><u>Back to top</u></a>')
+        $backToTop.css({'color': 'red', 'margin': '10px', 'font-weight': 'bold'})
         $backToTop.appendTo($body)
 
         /*----- set back to top button fade in and out ---------*/
@@ -149,7 +255,7 @@
         //set screen offset on screen for when the button will face in
         var offset = 250;
         //set the up to top fade in duration
-        var fadeInDuration = 1000;
+        var fadeInDuration = 2000;
 
         //set the on scroll function on the main Window
         $(window).scroll(function(){
@@ -158,9 +264,11 @@
           if($(this).scrollTop() > offset) {
             //if scroll off the threshold, fade in button with the set fadeInDuration
             $backToTop.fadeIn(fadeInDuration);
+            $backToTweet.fadeIn(fadeInDuration);
             } else {
               //if within threshold button fade out
-              $backToTop.fadeOut('fast')
+              $backToTop.fadeOut('fast');
+              $backToTweet.fadeOut('fast');
             }
         });
 

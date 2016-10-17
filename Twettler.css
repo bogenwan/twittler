@@ -1,5 +1,7 @@
 body{
   background-color: grey;
+  padding: 50px;
+  background-image: url("cloud.jpg");
 }
 
 #refresh{
@@ -9,4 +11,10 @@ body{
 
 .back-to-top{
   z-index: 100;
+}
+
+/*----css don't work in jQuery function------*/
+$tweetBody{
+  padding: 70px;
+  border: solid 2px black;
 }
